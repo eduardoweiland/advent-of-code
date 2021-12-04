@@ -1,6 +1,6 @@
-Some nice and simple vanilla js. To run:
+Some nice and simple ~~vanilla~~ ES6 modules js. To run:
 
 ```
-./part1.js < input.txt
-./part2.js < input.txt
+./part1.mjs < input.txt
+./part2.mjs < input.txt
 ```
