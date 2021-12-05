@@ -29,7 +29,7 @@ class BingoGameTest extends TestCase
     public function testNewBingoGameDoesNotHaveWinner(): void
     {
         $this->assertFalse($this->bingoGame->hasWinner());
-        $this->assertNull($this->bingoGame->getWinner());
+        $this->assertNull($this->bingoGame->getLastWinner());
     }
 
     public function testPlayRoundDrawsANumber(): void
@@ -58,20 +58,40 @@ class BingoGameTest extends TestCase
     {
         $this->board1->method('isWinner')->will($this->returnValue(false));
         $this->board2->method('isWinner')->will($this->returnValue(true));
+        $this->bingoGame->playRound();
         $this->assertTrue($this->bingoGame->hasWinner());
     }
 
-    public function testNoMoreNumbersAreDrawnAfterGameHasAWinner(): void
-    {
-        $this->numberDrawer->expects($this->never())->method('draw');
-        $this->board1->method('isWinner')->will($this->returnValue(true));
-        $this->bingoGame->playRound();
-    }
-
-    public function testGetWinner(): void
+    public function testGetLastWinner(): void
     {
         $this->board1->method('isWinner')->will($this->returnValue(false));
         $this->board2->method('isWinner')->will($this->returnValue(true));
-        $this->assertSame($this->board2, $this->bingoGame->getWinner());
+        $this->bingoGame->playRound();
+        $this->assertSame($this->board2, $this->bingoGame->getLastWinner());
+    }
+
+    public function testGetLastWinnerAfterSecondBoardWins(): void
+    {
+        $this->board1->method('isWinner')->will($this->onConsecutiveCalls(true, true));
+        $this->board2->method('isWinner')->will($this->onConsecutiveCalls(false, true));
+
+        $this->bingoGame->playRound();
+        $this->bingoGame->playRound();
+
+        $this->assertSame($this->board2, $this->bingoGame->getLastWinner());
+    }
+
+    public function testAreThereBoardsStillPlayingOnNewGame(): void
+    {
+        $this->board1->method('isWinner')->will($this->returnValue(false));
+        $this->board2->method('isWinner')->will($this->returnValue(false));
+        $this->assertTrue($this->bingoGame->areThereBoardsStillPlaying());
+    }
+
+    public function testAreThereBoardsStillPlayingAfterAllBoardsWon(): void
+    {
+        $this->board1->method('isWinner')->will($this->returnValue(true));
+        $this->board2->method('isWinner')->will($this->returnValue(true));
+        $this->assertFalse($this->bingoGame->areThereBoardsStillPlaying());
     }
 }

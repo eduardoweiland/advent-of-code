@@ -21,7 +21,7 @@ do {
 }
 while (!$game->hasWinner());
 
-$winner = $game->getWinner();
+$winner = $game->getLastWinner();
 $sumOfUnmarkedNumbers = array_sum($winner->getUnmarkedNumbers());
 $lastDrawnNumber = last($game->getDrawnNumbers());
 
