@@ -1,0 +1,28 @@
+#!/usr/bin/php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use EW\AoC\Bingo\BingoGame;
+use EW\AoC\Bingo\Board;
+use EW\AoC\Infra\InMemoryNumberDrawer;
+use EW\AoC\Infra\InputReader;
+use function Functional\last;
+
+$inputReader = new InputReader(STDIN);
+$numberDrawer = new InMemoryNumberDrawer($inputReader->readNumbersToDraw());
+$inputReader->readEmptyLine();
+$boardNumbers = $inputReader->readAllBoardNumbers();
+$boards = array_map(fn ($rows) => new Board($rows), $boardNumbers);
+$game = new BingoGame($numberDrawer, $boards);
+
+do {
+    $game->playRound();
+}
+while (!$game->hasWinner());
+
+$winner = $game->getWinner();
+$sumOfUnmarkedNumbers = array_sum($winner->getUnmarkedNumbers());
+$lastDrawnNumber = last($game->getDrawnNumbers());
+
+echo ($sumOfUnmarkedNumbers * $lastDrawnNumber) . PHP_EOL;

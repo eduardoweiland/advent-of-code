@@ -1,0 +1,23 @@
+{
+    "name": "eduardoweiland/aoc-2021-day04",
+    "description": "Advent of Code 2021 day 4",
+    "type": "project",
+    "minimum-stability": "stable",
+    "license": "Unlicense",
+    "autoload": {
+        "psr-4": {
+            "EW\\AoC\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EW\\AoC\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "require": {
+        "lstrojny/functional-php": "^1.17"
+    }
+}
