@@ -9,8 +9,8 @@ Everything here is [Unlicensed](LICENSE). Enjoy!
 * [Day 3](2021/day03) back to the old days with C 🤓
 * [Day 4](2021/day04) applying some TDD with PHP 8 🐘
 * [Day 5](2021/day05) awk again 🐧
-* Day 6 ?
-* Day 7 ?
+* [Day 6](2021/day05) learning some rust ⛭
+* [Day 7](2021/day05) some basic PHP 🐘
 * Day 8 ?
 * Day 9 ?
 * Day 10 ?
