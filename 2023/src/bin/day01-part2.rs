@@ -47,5 +47,6 @@ fn parse_num(str: &str) -> String {
         "eight" => "8",
         "nine" => "9",
         str => str,
-    }.to_string()
+    }
+    .to_string()
 }
