@@ -1,6 +1,12 @@
 # Advent of Code 2023
 
-* Day 1 ?
+All in Rust, one project, multiple binaries.
+
+```
+cargo run --bin dayXX-partY < input/dayXX.txt
+```
+
+* Day 1 ⭐⭐
 * Day 2 ?
 * Day 3 ?
 * Day 4 ?
