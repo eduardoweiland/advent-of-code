@@ -1,4 +1,4 @@
-use regex::{Regex, CaptureMatches};
+use regex::{CaptureMatches, Regex};
 use std::io;
 
 fn main() {
@@ -14,7 +14,14 @@ fn main() {
         }
 
         if is_game_possible(re_blocks.captures_iter(&line)) {
-            sum += re_game_id.captures(&line).unwrap().get(1).unwrap().as_str().parse::<u64>().unwrap();
+            sum += re_game_id
+                .captures(&line)
+                .unwrap()
+                .get(1)
+                .unwrap()
+                .as_str()
+                .parse::<u64>()
+                .unwrap();
         }
     }
 

@@ -1,4 +1,4 @@
-use std::{io, str::FromStr, num::ParseIntError, cmp};
+use std::{cmp, io, num::ParseIntError, str::FromStr};
 
 fn main() {
     let mut sum: u64 = 0;
