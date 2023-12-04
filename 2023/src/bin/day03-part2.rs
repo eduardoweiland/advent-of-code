@@ -1,7 +1,8 @@
 use regex::Regex;
 use std::{
     cmp::{max, min},
-    io, collections::HashMap,
+    collections::HashMap,
+    io,
 };
 
 type Key = (usize, usize);
@@ -37,20 +38,28 @@ fn main() {
             let part_number = a_match.as_str().parse::<u64>().unwrap();
 
             for y in row_range {
-                schematic[y][col_range.clone()].match_indices('*').for_each(|(x, _)| {
-                    maybe_gears.entry((x + col_range.start, y)).or_default().add_part(part_number);
-                });
+                schematic[y][col_range.clone()]
+                    .match_indices('*')
+                    .for_each(|(x, _)| {
+                        maybe_gears
+                            .entry((x + col_range.start, y))
+                            .or_default()
+                            .add_part(part_number);
+                    });
             }
         }
     }
 
-    let sum: u64 = maybe_gears.iter().filter_map(|(_, maybe_gear)| {
-        if maybe_gear.is_gear() {
-            Some(maybe_gear.gear_ratio())
-        } else {
-            None
-        }
-    }).sum();
+    let sum: u64 = maybe_gears
+        .iter()
+        .filter_map(|(_, maybe_gear)| {
+            if maybe_gear.is_gear() {
+                Some(maybe_gear.gear_ratio())
+            } else {
+                None
+            }
+        })
+        .sum();
 
     println!("{}", sum);
 }
