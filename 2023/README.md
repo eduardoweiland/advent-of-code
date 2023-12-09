@@ -11,7 +11,7 @@ cargo run --bin dayXX-partY < input/dayXX.txt
 * Day 3 ⭐⭐
 * Day 4 ⭐⭐
 * Day 5 ⭐⭐
-* Day 6 ?
+* Day 6 ⭐⭐
 * Day 7 ?
 * Day 8 ?
 * Day 9 ?
