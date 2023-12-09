@@ -1,7 +1,6 @@
 use std::{
     convert::Infallible,
     io::{self, Lines, StdinLock},
-    num::ParseIntError,
     str::FromStr,
 };
 
