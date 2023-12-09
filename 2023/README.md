@@ -6,14 +6,14 @@ All in Rust, one project, multiple binaries.
 cargo run --bin dayXX-partY < input/dayXX.txt
 ```
 
-* Day 1 ⭐⭐
-* Day 2 ⭐⭐
-* Day 3 ⭐⭐
-* Day 4 ⭐⭐
-* Day 5 ⭐⭐
-* Day 6 ⭐⭐
-* Day 7 ⭐⭐
-* Day 8 ⭐⭐
+* Day 1: [part 1](./src/bin/day01-part1.rs) and [part 2](./src/bin/day01-part2.rs)
+* Day 2: [part 1](./src/bin/day02-part1.rs) and [part 2](./src/bin/day02-part2.rs)
+* Day 3: [part 1](./src/bin/day03-part1.rs) and [part 2](./src/bin/day03-part2.rs)
+* Day 4: [part 1](./src/bin/day04-part1.rs) and [part 2](./src/bin/day04-part2.rs)
+* Day 5: [part 1](./src/bin/day05-part1.rs) and [part 2](./src/bin/day05-part2.rs)
+* Day 6: [part 1](./src/bin/day06-part1.rs) and [part 2](./src/bin/day06-part2.rs)
+* Day 7: [part 1](./src/bin/day07-part1.rs) and [part 2](./src/bin/day07-part2.rs)
+* Day 8: [part 1](./src/bin/day08-part1.rs) and [part 2](./src/bin/day08-part2.rs)
 * Day 9 ?
 * Day 10 ?
 * Day 11 ?
