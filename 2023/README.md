@@ -16,7 +16,7 @@ cargo run --bin dayXX-partY < input/dayXX.txt
 * Day 8: [part 1](./src/bin/day08-part1.rs) and [part 2](./src/bin/day08-part2.rs)
 * Day 9: [part 1](./src/bin/day09-part1.rs) and [part 2](./src/bin/day09-part2.rs)
 * Day 10 [part 1](./src/bin/day10-part1.rs) and [part 2](./src/bin/day10-part2.rs)
-* Day 11 ?
+* Day 11 [part 1](./src/bin/day11-part1.rs) and [part 2](./src/bin/day11-part2.rs)
 * Day 12 ?
 * Day 13 ?
 * Day 14 ?
