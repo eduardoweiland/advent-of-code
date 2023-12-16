@@ -1,4 +1,4 @@
-use std::{str::FromStr, convert::Infallible, io::stdin};
+use std::{convert::Infallible, io::stdin, str::FromStr};
 
 struct Sequence {
     numbers: Vec<i64>,
@@ -9,16 +9,17 @@ impl FromStr for Sequence {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Self {
-            numbers: s.split_whitespace().map(|n| n.parse::<i64>().unwrap()).collect()
+            numbers: s
+                .split_whitespace()
+                .map(|n| n.parse::<i64>().unwrap())
+                .collect(),
         })
     }
 }
 
 impl Sequence {
     fn new(numbers: Vec<i64>) -> Self {
-        Self {
-            numbers,
-        }
+        Self { numbers }
     }
 
     fn next(&self) -> i64 {
@@ -40,6 +41,10 @@ impl Sequence {
 }
 
 fn main() {
-    let sum: i64 = stdin().lines().map(|l| l.unwrap().parse::<Sequence>().unwrap()).map(|s| s.next()).sum();
+    let sum: i64 = stdin()
+        .lines()
+        .map(|l| l.unwrap().parse::<Sequence>().unwrap())
+        .map(|s| s.next())
+        .sum();
     println!("sum = {}", sum);
 }

@@ -12,7 +12,7 @@ impl Maze {
                     return (y as isize, x as isize);
                 }
             }
-        };
+        }
 
         unreachable!("input should always have start point");
     }
@@ -39,7 +39,10 @@ impl Maze {
             Some('F') => (south, east),
             Some('S') => {
                 let connecteds = vec![north, south, west, east];
-                let connecteds: Vec<_> = connecteds.iter().filter(|&c| self.get(*c).unwrap_or('.') != '.').collect();
+                let connecteds: Vec<_> = connecteds
+                    .iter()
+                    .filter(|&c| self.get(*c).unwrap_or('.') != '.')
+                    .collect();
                 (**connecteds.first().unwrap(), **connecteds.last().unwrap())
             }
             _ => unreachable!(),
@@ -48,7 +51,12 @@ impl Maze {
 }
 
 fn main() {
-    let maze = Maze(stdin().lines().map(|l| l.unwrap().chars().collect()).collect());
+    let maze = Maze(
+        stdin()
+            .lines()
+            .map(|l| l.unwrap().chars().collect())
+            .collect(),
+    );
     let start = maze.find_start();
     let mut previous = start;
     let mut current = start;
@@ -56,7 +64,11 @@ fn main() {
 
     loop {
         let connecteds = maze.find_connecteds(current);
-        let next = if connecteds.0 == previous { connecteds.1 } else { connecteds.0 };
+        let next = if connecteds.0 == previous {
+            connecteds.1
+        } else {
+            connecteds.0
+        };
 
         if next == start {
             break;

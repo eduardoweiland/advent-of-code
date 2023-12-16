@@ -18,7 +18,7 @@ impl Maze {
                     return (y as isize, x as isize);
                 }
             }
-        };
+        }
 
         unreachable!("input should always have start point");
     }
@@ -45,7 +45,10 @@ impl Maze {
             Some('F') => (south, east),
             Some('S') => {
                 let connecteds = vec![north, south, west, east];
-                let connecteds: Vec<_> = connecteds.iter().filter(|&c| self.get(*c).unwrap_or('.') != '.').collect();
+                let connecteds: Vec<_> = connecteds
+                    .iter()
+                    .filter(|&c| self.get(*c).unwrap_or('.') != '.')
+                    .collect();
                 (**connecteds.first().unwrap(), **connecteds.last().unwrap())
             }
             _ => unreachable!(),
@@ -54,15 +57,27 @@ impl Maze {
 }
 
 fn main() {
-    let mut maze = Maze(stdin().lines().map(|l| l.unwrap().chars().collect()).collect());
-    let start = Node { coord: maze.find_start(), pipe: 'S' };
+    let mut maze = Maze(
+        stdin()
+            .lines()
+            .map(|l| l.unwrap().chars().collect())
+            .collect(),
+    );
+    let start = Node {
+        coord: maze.find_start(),
+        pipe: 'S',
+    };
     let mut steps: Vec<Node> = vec![start];
     let mut previous = start.coord;
     let mut current = start.coord;
 
     loop {
         let connecteds = maze.find_connecteds(current);
-        let next = if connecteds.0 == previous { connecteds.1 } else { connecteds.0 };
+        let next = if connecteds.0 == previous {
+            connecteds.1
+        } else {
+            connecteds.0
+        };
 
         if next == steps[0].coord {
             break;
@@ -79,7 +94,11 @@ fn main() {
     // Clear pipes that are not in the loop
     for y in 0..maze.0.len() {
         for x in 0..maze.0[y].len() {
-            if steps.iter().find(|node| node.coord == (y as isize, x as isize)).is_none() {
+            if steps
+                .iter()
+                .find(|node| node.coord == (y as isize, x as isize))
+                .is_none()
+            {
                 maze.0[y][x] = '.';
             }
         }
@@ -97,7 +116,11 @@ fn main() {
             let mut inside = false;
 
             for xx in 0..x {
-                if maze.0[y][xx] == '|' || maze.0[y][xx] == 'L' || maze.0[y][xx] == 'J' || maze.0[y][xx] == 'S' {
+                if maze.0[y][xx] == '|'
+                    || maze.0[y][xx] == 'L'
+                    || maze.0[y][xx] == 'J'
+                    || maze.0[y][xx] == 'S'
+                {
                     inside = !inside;
                 }
             }
