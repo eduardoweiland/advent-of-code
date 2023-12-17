@@ -1,4 +1,7 @@
-use std::{io::stdin, cmp::Ordering::{Equal, Greater}};
+use std::{
+    cmp::Ordering::{Equal, Greater},
+    io::stdin,
+};
 
 fn count_arrangements(springs: &mut [u8], groups: &[u8]) -> u64 {
     match springs.get(0) {
@@ -9,7 +12,7 @@ fn count_arrangements(springs: &mut [u8], groups: &[u8]) -> u64 {
             res += count_arrangements(&mut springs[1..], groups);
             springs[0] = b'?';
             res
-        },
+        }
         Some(b'#') if groups.len() > 0 => {
             let len = groups[0] as usize;
 
@@ -17,10 +20,10 @@ fn count_arrangements(springs: &mut [u8], groups: &[u8]) -> u64 {
                 Equal if springs.iter().all(|c| *c != b'.') && groups.len() == 1 => 1,
                 Greater if springs[0..len].iter().all(|c| *c != b'.') && springs[len] != b'#' => {
                     count_arrangements(&mut springs[len + 1..], &groups[1..])
-                },
+                }
                 _ => 0,
             }
-        },
+        }
         None if groups.len() == 0 => 1,
         _ => 0,
     }
@@ -38,6 +41,9 @@ fn parse_line_and_count(line: &mut str) -> u64 {
 }
 
 fn main() {
-    let sum: u64 = stdin().lines().map(|line| parse_line_and_count(line.unwrap().as_mut_str())).sum();
+    let sum: u64 = stdin()
+        .lines()
+        .map(|line| parse_line_and_count(line.unwrap().as_mut_str()))
+        .sum();
     println!("sum = {sum}");
 }
