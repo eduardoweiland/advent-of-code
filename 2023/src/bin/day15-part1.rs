@@ -13,5 +13,15 @@ fn calc_hash(input: &str) -> u64 {
 }
 
 fn main() {
-    println!("anwser = {}", stdin().lines().next().unwrap().unwrap().split(',').map(calc_hash).sum::<u64>());
+    println!(
+        "anwser = {}",
+        stdin()
+            .lines()
+            .next()
+            .unwrap()
+            .unwrap()
+            .split(',')
+            .map(calc_hash)
+            .sum::<u64>()
+    );
 }

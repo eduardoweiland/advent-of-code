@@ -36,7 +36,10 @@ fn calc_load(map: &Vec<Vec<char>>) -> u64 {
 }
 
 fn main() {
-    let mut map: Vec<Vec<char>> = stdin().lines().map(|l| l.unwrap().chars().collect()).collect();
+    let mut map: Vec<Vec<char>> = stdin()
+        .lines()
+        .map(|l| l.unwrap().chars().collect())
+        .collect();
 
     tilt_north(&mut map);
     let load = calc_load(&map);
