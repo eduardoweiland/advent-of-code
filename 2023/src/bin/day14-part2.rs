@@ -127,7 +127,10 @@ fn tilt_cycle(map: Vec<Vec<char>>) -> Vec<Vec<char>> {
 }
 
 fn main() {
-    let mut map: Vec<Vec<char>> = stdin().lines().map(|l| l.unwrap().chars().collect()).collect();
+    let mut map: Vec<Vec<char>> = stdin()
+        .lines()
+        .map(|l| l.unwrap().chars().collect())
+        .collect();
     let mut maps_after_each_cycle: Vec<Vec<Vec<char>>> = vec![];
     let mut cycles_to_repeat = 0;
     let mut first_repeated_map = 0;
