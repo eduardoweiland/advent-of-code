@@ -5,3 +5,4 @@ Everything here is [Unlicensed](LICENSE). Enjoy!
 * [2021](2021/README.md)
 * 2022 🗙
 * [2023](2023/README.md)
+* [2024](2024/README.md)
