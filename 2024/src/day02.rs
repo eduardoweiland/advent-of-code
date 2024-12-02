@@ -22,6 +22,29 @@ pub fn solve_part1(reports: &Vec<Vec<i32>>) -> i32 {
         .count() as i32
 }
 
+#[aoc(day2, part2)]
+pub fn solve_part2(reports: &Vec<Vec<i32>>) -> i32 {
+    reports
+        .iter()
+        .filter(|report| {
+            if is_safe_report(report) {
+                true
+            } else {
+                // brute-force time
+                for i in 0..report.len() {
+                    let mut modified_report = report.to_vec();
+                    modified_report.remove(i);
+                    if is_safe_report(&modified_report) {
+                        return true;
+                    }
+                }
+
+                false
+            }
+        })
+        .count() as i32
+}
+
 fn is_safe_report(report: &Vec<i32>) -> bool {
     let last = report.iter();
     let next = report.iter().skip(1);
@@ -72,5 +95,11 @@ mod test {
     fn it_solves_part1() {
         let answer = solve_part1(&parse_input(EXAMPLE_INPUT));
         assert_eq!(answer, 2);
+    }
+
+    #[test]
+    fn it_solves_part2() {
+        let answer = solve_part2(&parse_input(EXAMPLE_INPUT));
+        assert_eq!(answer, 4);
     }
 }
