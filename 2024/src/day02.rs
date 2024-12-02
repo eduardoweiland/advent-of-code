@@ -18,28 +18,30 @@ pub fn parse_input(input: &str) -> Vec<Vec<i32>> {
 pub fn solve_part1(reports: &Vec<Vec<i32>>) -> i32 {
     reports
         .iter()
-        .filter(|report| {
-            let last = report.iter();
-            let next = report.iter().skip(1);
-
-            last.zip(next)
-                .into_iter()
-                .map(|(last, next)| last - next)
-                .scan(0, |last_diff, curr_diff| {
-                    if curr_diff > 3 || curr_diff < -3 || curr_diff == 0 {
-                        Some(false)
-                    } else if *last_diff > 0 && curr_diff < 0 {
-                        Some(false)
-                    } else if *last_diff < 0 && curr_diff > 0 {
-                        Some(false)
-                    } else {
-                        *last_diff = curr_diff;
-                        Some(true)
-                    }
-                })
-                .all(|safe| safe)
-        })
+        .filter(|report| is_safe_report(report))
         .count() as i32
+}
+
+fn is_safe_report(report: &Vec<i32>) -> bool {
+    let last = report.iter();
+    let next = report.iter().skip(1);
+
+    last.zip(next)
+        .into_iter()
+        .map(|(last, next)| last - next)
+        .scan(0, |last_diff, curr_diff| {
+            if curr_diff > 3 || curr_diff < -3 || curr_diff == 0 {
+                Some(false)
+            } else if *last_diff > 0 && curr_diff < 0 {
+                Some(false)
+            } else if *last_diff < 0 && curr_diff > 0 {
+                Some(false)
+            } else {
+                *last_diff = curr_diff;
+                Some(true)
+            }
+        })
+        .all(|safe| safe)
 }
 
 #[cfg(test)]
