@@ -1,9 +1,10 @@
 use aoc_runner_derive::aoc;
 use nom::{
+    branch::alt,
     bytes::complete::tag,
-    character::complete::digit1,
-    combinator::{all_consuming, map_res},
-    multi::many0,
+    character::complete::{anychar, digit1},
+    combinator::{map, map_res},
+    multi::{fold_many1, many_till},
     sequence::{delimited, separated_pair},
     IResult,
 };
@@ -30,29 +31,23 @@ fn parse_mul(input: &str) -> IResult<&str, Expr> {
     )(input)
 }
 
-fn discard_not_mul(input: &str) -> IResult<&str, ()> {
-    let mut rest = input;
-
-    loop {
-        if rest.is_empty() {
-            break;
-        }
-
-        match parse_mul(rest) {
-            Ok(_) => break,
-            Err(_) => rest = &rest[1..],
-        }
-    }
-
-    Ok((rest, ()))
+fn parse_expr(input: &str) -> IResult<&str, Expr> {
+    alt((
+        parse_mul,
+        map(tag("do()"), |_| Expr::Do),
+        map(tag("don't()"), |_| Expr::Dont),
+    ))(input)
 }
 
 fn parse_input(input: &str) -> IResult<&str, Vec<Expr>> {
-    all_consuming(many0(delimited(
-        discard_not_mul,
-        parse_mul,
-        discard_not_mul,
-    )))(input)
+    fold_many1(
+        many_till(anychar, parse_expr),
+        Vec::new,
+        |mut acc: Vec<_>, (_, expr)| {
+            acc.push(expr);
+            acc
+        },
+    )(input)
 }
 
 #[aoc(day3, part1)]
@@ -80,12 +75,6 @@ mod test {
     fn it_parses_single_mul_expr() {
         let mul = parse_mul("mul(2,4)");
         assert!(matches!(mul, Ok((_, Expr::Mul(x, y))) if x == 2 && y == 4));
-    }
-
-    #[test]
-    fn it_discards_not_mul_expr() {
-        let mul = discard_not_mul("xmul(2,4)");
-        assert!(matches!(mul, Ok((rest, _)) if rest == "mul(2,4)"));
     }
 
     #[test]
