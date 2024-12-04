@@ -9,9 +9,13 @@ use nom::{
 };
 
 #[derive(Debug)]
-struct Mul(u32, u32);
+enum Expr {
+    Mul(u32, u32),
+    Do,
+    Dont,
+}
 
-fn parse_mul(input: &str) -> IResult<&str, Mul> {
+fn parse_mul(input: &str) -> IResult<&str, Expr> {
     map_res(
         delimited(
             tag("mul("),
@@ -22,7 +26,7 @@ fn parse_mul(input: &str) -> IResult<&str, Mul> {
             ),
             tag(")"),
         ),
-        |(x, y)| Ok::<Mul, nom::error::Error<&str>>(Mul(x, y)),
+        |(x, y)| Ok::<Expr, nom::error::Error<&str>>(Expr::Mul(x, y)),
     )(input)
 }
 
@@ -43,7 +47,7 @@ fn discard_not_mul(input: &str) -> IResult<&str, ()> {
     Ok((rest, ()))
 }
 
-fn parse_input(input: &str) -> IResult<&str, Vec<Mul>> {
+fn parse_input(input: &str) -> IResult<&str, Vec<Expr>> {
     all_consuming(many0(delimited(
         discard_not_mul,
         parse_mul,
@@ -54,7 +58,13 @@ fn parse_input(input: &str) -> IResult<&str, Vec<Mul>> {
 #[aoc(day3, part1)]
 pub fn solve_part1(input: &str) -> u32 {
     match parse_input(input) {
-        Ok((_, exprs)) => exprs.iter().map(|Mul(x, y)| x * y).sum(),
+        Ok((_, exprs)) => exprs
+            .iter()
+            .map(|expr| match expr {
+                Expr::Mul(x, y) => x * y,
+                _ => 0,
+            })
+            .sum(),
         Err(err) => panic!("{}", err),
     }
 }
@@ -69,7 +79,7 @@ mod test {
     #[test]
     fn it_parses_single_mul_expr() {
         let mul = parse_mul("mul(2,4)");
-        assert!(matches!(mul, Ok((_, Mul(x, y))) if x == 2 && y == 4));
+        assert!(matches!(mul, Ok((_, Expr::Mul(x, y))) if x == 2 && y == 4));
     }
 
     #[test]
