@@ -52,24 +52,47 @@ fn parse_input(input: &str) -> IResult<&str, Vec<Expr>> {
 
 #[aoc(day3, part1)]
 pub fn solve_part1(input: &str) -> u32 {
-    match parse_input(input) {
-        Ok((_, exprs)) => exprs
-            .iter()
-            .map(|expr| match expr {
-                Expr::Mul(x, y) => x * y,
-                _ => 0,
-            })
-            .sum(),
-        Err(err) => panic!("{}", err),
-    }
+    let (_, exprs) = parse_input(input).expect("input is incorrect");
+
+    exprs
+        .iter()
+        .map(|expr| match expr {
+            Expr::Mul(x, y) => x * y,
+            _ => 0,
+        })
+        .sum()
+}
+
+#[aoc(day3, part2)]
+pub fn solve_part2(input: &str) -> u32 {
+    let (_, exprs) = parse_input(input).expect("input is incorrect");
+
+    exprs
+        .iter()
+        .scan(true, |enabled, expr| match expr {
+            Expr::Mul(x, y) if *enabled => Some(x * y),
+            Expr::Mul(_, _) => Some(0),
+            Expr::Do => {
+                *enabled = true;
+                Some(0)
+            }
+            Expr::Dont => {
+                *enabled = false;
+                Some(0)
+            }
+        })
+        .sum()
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
 
-    const EXAMPLE_INPUT: &str =
+    const EXAMPLE_INPUT_1: &str =
         "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))";
+
+    const EXAMPLE_INPUT_2: &str =
+        "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
 
     #[test]
     fn it_parses_single_mul_expr() {
@@ -79,7 +102,13 @@ mod test {
 
     #[test]
     fn it_solves_part1() {
-        let answer = solve_part1(EXAMPLE_INPUT);
+        let answer = solve_part1(EXAMPLE_INPUT_1);
         assert_eq!(answer, 161);
+    }
+
+    #[test]
+    fn it_solves_part2() {
+        let answer = solve_part2(EXAMPLE_INPUT_2);
+        assert_eq!(answer, 48);
     }
 }
