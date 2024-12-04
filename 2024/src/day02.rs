@@ -5,8 +5,7 @@ pub fn parse_input(input: &str) -> Vec<Vec<i32>> {
     input
         .lines()
         .map(|line| {
-            line
-                .trim()
+            line.trim()
                 .split_whitespace()
                 .map(|n| n.parse::<i32>().unwrap())
                 .collect()
@@ -81,14 +80,17 @@ mod test {
     #[test]
     fn it_parses_input() {
         let reports = parse_input(EXAMPLE_INPUT);
-        assert_eq!(reports, [
-            [7, 6, 4, 2, 1],
-            [1, 2, 7, 8, 9],
-            [9, 7, 6, 2, 1],
-            [1, 3, 2, 4, 5],
-            [8, 6, 4, 4, 1],
-            [1, 3, 6, 7, 9],
-        ]);
+        assert_eq!(
+            reports,
+            [
+                [7, 6, 4, 2, 1],
+                [1, 2, 7, 8, 9],
+                [9, 7, 6, 2, 1],
+                [1, 3, 2, 4, 5],
+                [8, 6, 4, 4, 1],
+                [1, 3, 6, 7, 9],
+            ]
+        );
     }
 
     #[test]
