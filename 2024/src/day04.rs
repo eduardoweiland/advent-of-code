@@ -29,6 +29,30 @@ pub fn solve_part1(grid: &Vec<Vec<char>>) -> u32 {
     found
 }
 
+#[aoc(day4, part2)]
+pub fn solve_part2(grid: &Vec<Vec<char>>) -> u32 {
+    let mut found = 0;
+
+    for y in 1..grid.len() - 1 {
+        for x in 1..grid[y].len() - 1 {
+            if grid[y][x] == 'A' {
+                let ul = grid[y - 1][x - 1];
+                let ur = grid[y - 1][x + 1];
+                let dl = grid[y + 1][x - 1];
+                let dr = grid[y + 1][x + 1];
+
+                if (ul == 'M' && dr == 'S') || (ul == 'S' && dr == 'M') {
+                    if (ur == 'M' && dl == 'S') || (ur == 'S' && dl == 'M') {
+                        found += 1;
+                    }
+                }
+            }
+        }
+    }
+
+    found
+}
+
 #[derive(Clone, Copy)]
 enum Dir {
     Right,
@@ -112,5 +136,11 @@ MXMXAXMASX";
     fn it_solves_part1() {
         let answer = solve_part1(&parse_input(EXAMPLE_INPUT));
         assert_eq!(answer, 18);
+    }
+
+    #[test]
+    fn it_solves_part2() {
+        let answer = solve_part2(&parse_input(EXAMPLE_INPUT));
+        assert_eq!(answer, 9);
     }
 }
