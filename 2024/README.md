@@ -16,10 +16,10 @@ cargo aoc -y 2024 [-d {day}]
 ```
 
 * [Day 1](./src/day01.rs)
-* Day 2 ?
-* Day 3 ?
-* Day 4 ?
-* Day 5 ?
+* [Day 2](./src/day02.rs)
+* [Day 3](./src/day03.rs)
+* [Day 4](./src/day04.rs)
+* [Day 5](./src/day05.rs)
 * Day 6 ?
 * Day 7 ?
 * Day 8 ?
