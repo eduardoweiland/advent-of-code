@@ -32,7 +32,32 @@ fn solve_part1(map: &Vec<Vec<Position>>) -> u32 {
     visited
 }
 
-#[derive(Copy, Clone)]
+#[aoc(day6, part2)]
+fn solve_part2(map: &Vec<Vec<Position>>) -> u32 {
+    let mut possible_loops = 0;
+
+    // a simple brute-force
+    for y in 0..map.len() {
+        for x in 0..map[y].len() {
+            match &map[y][x] {
+                Position::NotVisited => {
+                    let mut map = map.clone();
+                    map[y][x] = Position::Obstacle;
+
+                    println!("checking for loops with obstacle at {x}x{y}");
+                    if contains_loop(&map) {
+                        possible_loops += 1;
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+
+    possible_loops
+}
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 enum Dir {
     Up,
     Right,
@@ -51,7 +76,7 @@ impl Dir {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 enum Position {
     NotVisited,
     Visited,
@@ -99,6 +124,33 @@ fn next_guard_pos(
     }
 }
 
+fn contains_loop(map: &Vec<Vec<Position>>) -> bool {
+    let (mut guard_pos, mut guard_dir) = find_guard(&map);
+    let mut visited_positions = vec![];
+
+    visited_positions.push((guard_pos, guard_dir));
+
+    while let Some(new_pos) = next_guard_pos(guard_pos, guard_dir, &map) {
+        match map[new_pos.1][new_pos.0] {
+            Position::Obstacle => guard_dir = guard_dir.turn(),
+            _ => {
+                if visited_positions.contains(&(new_pos, guard_dir)) {
+                    return true;
+                } else {
+                    visited_positions.push((new_pos, guard_dir));
+                    guard_pos = new_pos;
+                }
+
+                if visited_positions.len() > map.len() * map[0].len() * 4 {
+                    return false;
+                }
+            }
+        }
+    }
+
+    false
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -118,5 +170,11 @@ mod test {
     fn it_solves_part1() {
         let answer = solve_part1(&parse_input(EXAMPLE_INPUT));
         assert_eq!(answer, 41);
+    }
+
+    #[test]
+    fn it_solves_part2() {
+        let answer = solve_part2(&parse_input(EXAMPLE_INPUT));
+        assert_eq!(answer, 6);
     }
 }
