@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use aoc_runner_derive::{aoc, aoc_generator};
 
 #[aoc_generator(day5)]
@@ -37,22 +39,47 @@ fn solve_part1(input: &Input) -> u32 {
     input
         .updates
         .iter()
-        .filter_map(|update| {
-            for rule in &input.rules {
-                let x_index = update.iter().position(|el| *el == rule.0);
-                let y_index = update.iter().position(|el| *el == rule.1);
+        .filter(|update| is_correctly_ordered(update, &input.rules))
+        .map(|update| update[update.len() / 2])
+        .sum()
+}
 
-                if let (Some(x), Some(y)) = (x_index, y_index) {
-                    if x > y {
-                        return None;
-                    }
+#[aoc(day5, part2)]
+fn solve_part2(input: &Input) -> u32 {
+    input
+        .updates
+        .iter()
+        .filter(|update| !is_correctly_ordered(update, &input.rules))
+        .cloned()
+        .map(|mut update| {
+            update.sort_by(|a, b| {
+                if input.rules.contains(&(*a, *b)) {
+                    Ordering::Less
+                } else if input.rules.contains(&(*b, *a)) {
+                    Ordering::Greater
+                } else {
+                    Ordering::Equal
                 }
-            }
+            });
 
-            let middle = update.len() / 2;
-            Some(update[middle])
+            update[update.len() / 2]
         })
         .sum()
+}
+
+fn is_correctly_ordered(update: &Vec<u32>, rules: &Vec<(u32, u32)>) -> bool {
+    for rule in rules {
+        let x_index = update.iter().position(|el| *el == rule.0);
+        let y_index = update.iter().position(|el| *el == rule.1);
+
+        if let (Some(x), Some(y)) = (x_index, y_index) {
+            if x > y {
+                return false;
+            }
+        }
+    }
+
+    true
 }
 
 #[derive(Debug)]
@@ -98,5 +125,11 @@ mod test {
     fn it_solves_part1() {
         let answer = solve_part1(&parse_input(EXAMPLE_INPUT));
         assert_eq!(answer, 143);
+    }
+
+    #[test]
+    fn it_solves_part2() {
+        let answer = solve_part2(&parse_input(EXAMPLE_INPUT));
+        assert_eq!(answer, 123);
     }
 }
