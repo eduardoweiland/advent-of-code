@@ -15,11 +15,21 @@ fn parse_input(input: &str) -> Vec<Expression> {
 fn solve_part1(expressions: &Vec<Expression>) -> u64 {
     expressions
         .iter()
-        .filter(|expr| expr.is_solvable())
+        .filter(|expr| expr.is_solvable(&[Operator::Add, Operator::Mul]))
         .map(|expr| expr.result)
         .sum()
 }
 
+#[aoc(day7, part2)]
+fn solve_part2(expressions: &Vec<Expression>) -> u64 {
+    expressions
+        .iter()
+        .filter(|expr| expr.is_solvable(&[Operator::Add, Operator::Mul, Operator::Concat]))
+        .map(|expr| expr.result)
+        .sum()
+}
+
+#[derive(Debug)]
 struct Expression {
     result: u64,
     operands: Vec<u64>,
@@ -39,19 +49,45 @@ impl FromStr for Expression {
 }
 
 impl Expression {
-    fn is_solvable(&self) -> bool {
-        check(self.result, 0, &self.operands)
+    fn is_solvable(&self, operators: &[Operator]) -> bool {
+        check(self.result, 0, operators, &self.operands)
     }
 }
 
-fn check(expected: u64, accumulated: u64, remaining_operands: &[u64]) -> bool {
+#[derive(Debug)]
+enum Operator {
+    Add,
+    Mul,
+    Concat,
+}
+
+impl Operator {
+    fn apply(&self, a: u64, b: u64) -> u64 {
+        match self {
+            Operator::Add => a.checked_add(b).unwrap(),
+            Operator::Mul => a.checked_mul(b).unwrap(),
+            Operator::Concat => format!("{a}{b}").parse().unwrap(),
+        }
+    }
+}
+
+fn check(
+    expected: u64,
+    accumulated: u64,
+    operators: &[Operator],
+    remaining_operands: &[u64],
+) -> bool {
     if accumulated > expected {
         false
     } else if remaining_operands.len() > 0 {
-        let with_add = accumulated + remaining_operands[0];
-        let with_mult = accumulated * remaining_operands[0];
-        check(expected, with_add, &remaining_operands[1..])
-            || check(expected, with_mult, &remaining_operands[1..])
+        operators.iter().any(|op| {
+            check(
+                expected,
+                op.apply(accumulated, remaining_operands[0]),
+                operators,
+                &remaining_operands[1..],
+            )
+        })
     } else {
         remaining_operands.len() == 0 && expected == accumulated
     }
@@ -75,5 +111,11 @@ mod test {
     fn it_solves_part1() {
         let answer = solve_part1(&parse_input(EXAMPLE_INPUT));
         assert_eq!(answer, 3749);
+    }
+
+    #[test]
+    fn it_solves_part2() {
+        let answer = solve_part2(&parse_input(EXAMPLE_INPUT));
+        assert_eq!(answer, 11387);
     }
 }
